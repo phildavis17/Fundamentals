@@ -9,7 +9,7 @@ class Stack():
         for item in args:
             self.stack.append(item)
 
-    def not_if_empty(func):
+    def raise_if_empty(func):
         def wrapper_func(self, *args, **kwargs):
             if not self.stack:
                 raise Exception("Empty stack exception.")
@@ -20,21 +20,21 @@ class Stack():
     def push(self, item) -> None:
         self.stack.append(item)
 
-    @not_if_empty
+    @raise_if_empty
     def pop(self) -> Any:
         buffer = self.stack[-1]
         del(self.stack[-1])
         return buffer
 
-    @not_if_empty
+    @raise_if_empty
     def peek(self) -> Any:
         return self.stack[-1]
 
     def index_of(self, target) -> int:
-        for i, item in enumerate(self.stack):
+        for i, item in enumerate(reversed(self.stack)):
             if item == target:
-                return len(self) - i - 1
-        raise Exception("Target not in stack")
+                return i
+        raise Exception("Target not in stack")  #? Should this return -1 instead of raising?
 
     def __len__(self) -> int:
         return len(self.stack)
