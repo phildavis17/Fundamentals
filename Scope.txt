@@ -1,0 +1,11 @@
+Data Structures
+ - Stack
+ - Queue
+ - Priority Queue
+ - Linked List
+ - Doubly Linked List
+ - Hash Table
+ - Heap
+ - Binary Tree
+ - Trie
+ - Red Black Tree
