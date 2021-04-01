@@ -127,36 +127,57 @@ class LinkedList:
 
     def __init__(self, *args) -> None:
         self.head = None
+        self.current = None
         for item in args:
             self.append(item)
 
-    def scan(self) -> Any:
-        if self.head == None:
-            return None
-        buffer = self.head
-        yield buffer
-        if not buffer.is_tail():
-            buffer = buffer.next
+    def _prepend_node(self, node: LLNode) -> None:
+        node.next = self.head
+        self.head = node
 
-    def append(self, item) -> None:
-        if self.head == None:
-            self.head = LLNode(item)
-            return None
+    def prepend(self, item: Any) -> None:
+        new_node = LLNode(item)
+        self._prepend_node(new_node)
+
+    def scan(self) -> LLNode:
+        if self.head is None:
+            return
         buffer = self.head
         while not buffer.is_tail():
+            yield buffer
             buffer = buffer.next
-        buffer.next = LLNode(item)
+        yield buffer
 
-    def prepend(self, item) -> None:
-        new_head = LLNode(item)
-        new_head.next = self.head
-        self.head = new_head
+    def find_tail(self) -> LLNode:
+        for node in self.scan():
+            if node.is_tail():
+                return node
+
+    def _append_node(self, node: LLNode) -> None:
+        if self.head is None:
+            self.head = node
+        self.find_tail().next = node
+
+    def append(self, item) -> None:
+        new_node = LLNode(item)
+        self._append_node(new_node)
 
     def insert_after(self, item, target) -> None:
-        pass
+        for node in self.scan():
+            if node.data == target:
+                new_node = LLNode(item)
+                new_node.next = node.next
+                node.next = new_node
 
-    def remove(self, item) -> None:
-        pass
+    def remove(self, target) -> None:
+        if self.head and self.head.data == target:
+            self.head = self.head.next
+            return
+        for node in self.scan():
+            if node.next and node.next.data == target:
+                node.next = node.next.next
+                return
+        raise ValueError(f"{target} not in LinkedList.")
 
     def is_cyclical(self) -> bool:
         pass
@@ -165,30 +186,61 @@ class LinkedList:
         pass
 
     def __len__(self) -> int:
-        l = 0
-        if self.head == None:
-            return l
+        if self.head is None:
+            return 0
+        n = 0
         for i in self.scan():
-            l += 1
-        return l
+            n += 1
+        return n
 
     def __bool__(self) -> bool:
         return self.head != None
 
     def __contains__(self, target) -> bool:
-        pass
+        for n in self.scan():
+            if n.data == target:
+                return True
+        return False
 
     def __repr__(self) -> str:
-        pass
+        return f"<Linked List {hex(id(self))}>"
 
     def __str__(self) -> str:
         pass
 
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        self.current = self.head
+        print(f"Current = {self.current}")
+        if self.current is not None:
+            buffer = self.current
+            self.current = self.current.next
+            print(f"New Current = {self.current}")
+            return buffer
+        else:
+            raise StopIteration
+
+    def __getitem__(self, target: int) -> LLNode:
+        for i, node in enumerate(self.scan()):
+            if i == target:
+                return node
+        raise IndexError("LinkedList Index out of range")
+
 
 if __name__ == "__main__":
-    s = Stack()
-    s.push(1)
-    s.push(2)
-    s.push(3)
-    print(s)
-    print(s.index_of(3))
+    l = LinkedList()
+
+    for n in l.scan():
+        print("UH OH")
+
+    l.prepend(0)
+    l.prepend(18)
+    l.prepend(9)
+
+    l.append(44)
+    l.append(55)
+
+    for n in l.scan():
+        print(n)
