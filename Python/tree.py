@@ -5,10 +5,12 @@ class TreeNode:
         self.right = None
 
     def __repr__(self) -> str:
-        pass
+        return f"TreeNode with value {self.val}"
 
     def __str__(self) -> str:
         return str(self.val)
+
+    
 
 
 class Tree:
@@ -16,13 +18,28 @@ class Tree:
         self.root = None
 
     def insert(self, val) -> None:
-        pass
+        hot = self.root
+        placed = False
+        while not placed:
+            if hot.val > val:
+                if hot.left is None:
+                    hot.left = TreeNode(val)
+                    placed = True
+                else:
+                    hot = hot.left
+            else:
+                if hot.right is None:
+                    hot.right = TreeNode(val)
+                    placed = True
+                else:
+                    hot = hot.right
+
 
     def __contains__(self, val) -> bool:
         pass
 
     def __repr__(self) -> str:
-        pass
+        
 
     def __str__(self) -> str:
         pass
