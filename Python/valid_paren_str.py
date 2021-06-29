@@ -94,3 +94,13 @@ if __name__ == "__main__":
     except AssertionError:
         for t in [s for s in BAD_STRS if paren_test_wc(s)]:
             logging.warning(f"Error: {t} = {paren_test_wc(t)}")
+
+
+
+"""
+
+What are the rules?
+ - go through and try to balance it the normal way
+ - if there is a residual stack, try to apply asterisks to it
+
+"""
